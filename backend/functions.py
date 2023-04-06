@@ -15,28 +15,45 @@ def numbered_list_splitter(text):
             result.append(s)      # Append the line to the resulting list
         curr_num = int(num)       # Assign the current number
     return result
-    
+
+def strip_numbers(text):
+    s = text
+    l = re.findall(r'(?:^|\n)(([0-9]+)\.[\s\S]*?)(?=\n[0-9]+\.|\Z)', s)
+    for p in l:
+        s = s.replace(p[0], '')
 
 def flashcard_splitter(text):
-    cards = text.split("Front:")
+    text = text.replace("\n", "")
+    text = text.split('---')[0]
+    cards = text.split("FRONT:")
+    print(cards)
     for i in range(len(cards)):
-        cards[i] = {"front": cards[i].split("Back:")[0], "back": cards[i].split("Back:")[1]}
-    return cards
+        
+        print(f'cards[i]: {cards[i]}')
+        print(f'len cards: {len(cards)}')
+        print(f'i: {i}')
+        try:
+            cards[i] = {"front": cards[i].split("BACK:")[0], "back": cards[i].split("BACK:")[1]}
+        except:
+            print("failed")
+    return cards[1:]
 
-def get_flashcards(lesson, specifics, number_of_flashcards=5):
-    engine = 'text-ada-001'
-    # engine = 'text-davinci-003'
-    prompt = (f"Create strong flashcards for preparing a student for an exam in this lesson: {lesson}. Inlcude material regarding {specifics}:\n Front:")
+def get_cards(lesson, specifics, number_of_flashcards=5):
+    # engine = 'text-ada-001'
+    engine = 'text-davinci-003'
+    # prompt = (f"Create {number_of_flashcards} strong flashcards for preparing a student for an exam in this lesson: {lesson}. Inlcude material regarding {specifics}:\n Organize using Front/Back, and do not number the cards. Front:")
+    prompt = (f"Create {number_of_flashcards} strong flashcards for preparing a student for an exam in this lesson: {lesson}. Inlcude material regarding {specifics}. Please use the format template. \n---BEGIN FLASHCARDS TEMPLATE---\nFRONT:${{flashcard question}}\nBACK:${{flashcard answer}}\nFRONT:${{flashcard question}}\nBACK:${{flashcard answer}}\n---END FLASHCARDS TEMPLATE---\n---BEGIN FLASHCARDS---")
+
     flashcards = openai.Completion.create(
         engine=engine,
         prompt=prompt,
-        max_tokens=200,
+        max_tokens=800,
         n=1,
         stop=None,
         temperature=0,
     )
-    cards = flashcard_splitter(flashcards.choices[0].text)
     print(flashcards.choices[0].text)
+    cards = flashcard_splitter(flashcards.choices[0].text)
     return cards
 
     

@@ -42,7 +42,7 @@ def get_course():
 def get_flashcards():
     if request.method == "POST":
         data = request.get_json(force=True)
-        flashcards = get_flashcards(data['lesson'], data['specifics'], data['number_of_flashcards'])
+        flashcards = get_cards(data['lesson'], data['specifics'], data['number_of_flashcards'])
         response = flask.jsonify(flashcards)
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
