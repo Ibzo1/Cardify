@@ -9,7 +9,7 @@ from functions import *
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 
-openai.api_key = "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"
+openai.api_key = ""
 
 @app.route("/users", methods=["OPTIONS", "GET"])
 #@cross_origin(headers=['Content-Type','Authorization', 'Access-Control-Allow-Origin'])
