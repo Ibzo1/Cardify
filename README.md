@@ -12,4 +12,7 @@ The backend is built off of Flask, where I developed algorithms that work togeth
 
 ## Requests
 All requests are done over Axios, which communicates between the front end back end and sends parsed text to the backend where it is formatted and outputted into cards on the frontend.
+
+
  
+![cardify1](https://github.com/Ibzo1/Cardify/assets/110640043/e43c940d-1e98-4baa-a2e7-4ca39d2b36a0)
